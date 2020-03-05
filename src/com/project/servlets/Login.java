@@ -1,8 +1,10 @@
 package com.project.servlets;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.annotation.Resource;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,53 +13,59 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
-import com.project.db.PostDBUtil;
 import com.project.db.UserDBUtil;
 import com.project.models.User;
 
 /**
- * Servlet implementation class CreatePost
+ * Servlet implementation class Login
  */
-@WebServlet("/CreatePost")
-public class CreatePost extends HttpServlet {
+@WebServlet("/Login")
+public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CreatePost() {
+    public Login() {
         super();
         // TODO Auto-generated constructor stub
-        
     }
 
     @Resource(name="jdbc/project")
     private DataSource datasource;
-    private PostDBUtil postdb;
+    private UserDBUtil userdb;
     
 	@Override
 	public void init() throws ServletException {
 		// TODO Auto-generated method stub
 		super.init();
-		postdb = new PostDBUtil(datasource);
+		userdb = new UserDBUtil(datasource);
 		
 	}
-
+	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 //		response.getWriter().append("Served at: ").append(request.getContextPath());
-		String postdetails=request.getParameter("createpost");
-		HttpSession session=request.getSession(); 
-		int userid = (Integer) session.getAttribute("userID");
-		String email = (String) session.getAttribute("email");
 		
-		User userpost=new User(userid, email,postdetails);
+		String email=request.getParameter("email");
+		String psw=request.getParameter("psw");
 		
-		userpost.post(postdb);
+		User temp = new User(email,psw);
+		temp.login(userdb);
 		
+		if(temp.getMatch() == true)
+		{
+			HttpSession session=request.getSession();  
+	        session.setAttribute("name",temp.getName());
+	        session.setAttribute("email",temp.getEmail());
+	        session.setAttribute("userID",123);
+	 
+	        
+	        response.sendRedirect("Home.jsp");
+		}
 	}
 
 	/**
