@@ -9,26 +9,26 @@
 </head>
 <body>
 
-  <form action="CreatePost" method="post">
- 
-  
-  <div>
-  
-  <label for="post" > WHATS ON YOUR MIND </label>   <br>
-       <%  
-       session.getAttribute("name");
-		  System.out.println(session.getAttribute("name"));
-       %>
-       
-       
-  <input type="text" for="createpost" name="createpost">
-
-  </div>
-   <div id="bottomnav">
-  <input type="submit"  value="Home" for="home">
-  </div>
-  
+ <form action="Addfriend" method="post">
+  <input type="text" name="searchfriend" placeholder="searchfriend">
+  <input type="submit" name="displayfriendprofile" value="showfriendprofile">
   </form>
+
+  <form action="CreatePost" method="post">
+  <div>
+  <label for="post" > WHAT'S ON YOUR MIND </label>   <br>
+   
+  <input type="text" for="PostOperations" name="createpost">
+  </div>
+  
+  <input type="submit"  value="Post anything" for="homepost"><br>
+ 
+  </form>
+  
+  <form action="PostOperations" method="post">
+  <input type="submit"  value="Personal Profile" name="profile">
+  </form>
+ 
   
 </body>
 </html>

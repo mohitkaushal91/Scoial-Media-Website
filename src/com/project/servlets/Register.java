@@ -56,6 +56,9 @@ public class Register extends HttpServlet {
 
 		User tmpUser = new User(email, name, pass);
 		tmpUser.register(userdb);
+		
+		response.sendRedirect("Login.jsp");
+		
 
 		System.out.println(userdb);
 

@@ -1,8 +1,11 @@
 package com.project.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.annotation.Resource;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +15,6 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import com.project.db.PostDBUtil;
-import com.project.db.UserDBUtil;
 import com.project.models.User;
 
 /**
@@ -54,9 +56,35 @@ public class CreatePost extends HttpServlet {
 		int userid = (Integer) session.getAttribute("userID");
 		String email = (String) session.getAttribute("email");
 		
+		System.out.println("ttttt"+userid);
+		System.out.println("ttttt"+email);
+		
 		User userpost=new User(userid, email,postdetails);
 		
 		userpost.post(postdb);
+		
+	/*ArrayList<User>  outputpost=userpost.DisplayDatabasePosts(postdb);
+		
+		
+//		ArrayList<PostDBUtil> =new ArrayList<>();
+		//list.add(postdb);	
+	System.out.println("ddddd");
+		System.out.println(outputpost);
+		System.out.println("han ethe hai");
+		
+
+		
+		request.setAttribute("fied",outputpost);   */
+	
+
+		ServletContext context= getServletContext();
+		RequestDispatcher rd= context.getRequestDispatcher("/profile.jsp");
+		rd.forward(request, response);
+		
+		
+		//response.sendRedirect("profile.jsp?fied="+outputpost); working
+		
+	
 		
 	}
 

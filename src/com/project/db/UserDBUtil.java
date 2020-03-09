@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Random;
 
 import javax.sql.DataSource;
 
@@ -20,6 +21,7 @@ public class UserDBUtil {
 
 	public void uploaddata(User user) throws SQLException {
 
+	
 		System.out.println(user.getName());
 		System.out.println(user.getEmail());
 		System.out.println(user.getPass());

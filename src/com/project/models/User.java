@@ -11,6 +11,7 @@ public class User {
 	String name;
 	String pass;
 	String post;
+	String inputtext;
 	int userID;
 	Boolean matched;
 	public User(String email, String name, String pass) {
@@ -25,18 +26,45 @@ public class User {
 		this.pass = pass;
 	}
 	
-	public User(int userId, String email, String post) {
+	public User( String email, String name,int userId) {
+		this.userID = userId;
+		this.name=name;
+		this.email = email;
+	}
+	public User(int userId, String email,String post) {
 		this.userID = userId;
 		this.post=post;
 		this.email = email;
+	}
+	
+	public User() {
+		// TODO Auto-generated constructor stub
+	}
+
+	
+	public User(String inputtext) {
+	this.inputtext=inputtext;	
 	}
 	
 	public String getPost() {
 		return post;
 	}
 	
+	public void setPost(String post) {
+		 this.post=post;
+	}
+	
+	public int getUserId() {
+		return userID;
+	}
+	public int setUserId(int userID) {
+		this.userID=userID;
+		return userID;
+	}
+	
+	
 	public String getEmail() {
-		return email;
+		return email;	
 	}
 	public void setEmail(String email) {
 		this.email = email;
@@ -62,11 +90,20 @@ public class User {
 		this.matched = match;
 	}
 	
+	/*public String getInputText() {
+		return inputtext;
+	}
+	
+	public  void setInputText(String inputtext) {
+		this.inputtext=inputtext;
+	}*/
 	
 	public void register(UserDBUtil userdb) {
 		
 		try {
 			userdb.uploaddata(this);
+			
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -82,9 +119,7 @@ public class User {
 			if(this.pass.equals(dtemp.getPass()))
 			{
 				this.name = dtemp.getName();
-				this.setMatch(true);
-				
-				
+				this.setMatch(true);								
 			}	
 			else
 			{
@@ -104,9 +139,37 @@ public class User {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+				
+	}
+	
+	
+/*	
+public ArrayList<User> DisplayDatabasePosts(PostDBUtil postdb) {
 		
+		try {
+			return(postdb.getPostDetails(this.email));
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 		
 	}
+
+public void searchfriendindatabase(String inputtext) {
+	
+	PostDBUtil postdb=new PostDBUtil();
+	
+	try {
+		postdb.getuserinfodatabase(this.getInputText());
+		
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();	
+	}
+	
+}*/
 	
 	
 }
