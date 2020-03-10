@@ -61,30 +61,9 @@ public class CreatePost extends HttpServlet {
 		
 		User userpost=new User(userid, email,postdetails);
 		
-		userpost.post(postdb);
-		
-	/*ArrayList<User>  outputpost=userpost.DisplayDatabasePosts(postdb);
-		
-		
-//		ArrayList<PostDBUtil> =new ArrayList<>();
-		//list.add(postdb);	
-	System.out.println("ddddd");
-		System.out.println(outputpost);
-		System.out.println("han ethe hai");
-		
+		userpost.post(postdb);	
 
-		
-		request.setAttribute("fied",outputpost);   */
-	
-
-		ServletContext context= getServletContext();
-		RequestDispatcher rd= context.getRequestDispatcher("/profile.jsp");
-		rd.forward(request, response);
-		
-		
-		//response.sendRedirect("profile.jsp?fied="+outputpost); working
-		
-	
+		response.sendRedirect("Home.jsp");
 		
 	}
 

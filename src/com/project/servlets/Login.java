@@ -1,8 +1,11 @@
 package com.project.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.annotation.Resource;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
+import com.project.db.PostDBUtil;
 import com.project.db.UserDBUtil;
 import com.project.models.User;
 
@@ -51,18 +55,23 @@ public class Login extends HttpServlet {
 		String email=request.getParameter("email");
 		String psw=request.getParameter("psw");
 		
+		System.out.println(email); //1
+
+		
 		User temp = new User(email,psw);
+		
+		System.out.println(temp.getEmail()); //2
+		
 		temp.login(userdb);
+		
+		System.out.println(temp.getEmail()); //3
 		
 		if(temp.getMatch() == true)
 		{
 			HttpSession session=request.getSession();  
-	        session.setAttribute("name",temp.getName());
-	        session.setAttribute("email",temp.getEmail());
-	        session.setAttribute("userID",123);
-	 
+	        session.setAttribute("user", temp);
 	        
-	        response.sendRedirect("Home.jsp");
+	        response.sendRedirect("Home");
 		}
 	}
 

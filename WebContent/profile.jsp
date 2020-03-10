@@ -22,7 +22,7 @@ hello profile
  {
 	 out.println("name:"+item.getName()+"\n");  
 	 out.println("id:"+item.getEmail()+"\n");
-	 out.println("post:"+item.getPost()+"\n");
+	 //out.println("post:"+item.getPost()+"\n");
 	
 	/*  out.println("email:"+item.getEmail()+"\n"); */
 	

@@ -1,7 +1,7 @@
 package com.project.models;
 
 import java.sql.SQLException;
-
+import java.util.ArrayList;
 import com.project.db.PostDBUtil;
 import com.project.db.UserDBUtil;
 
@@ -10,10 +10,13 @@ public class User {
 	String email;
 	String name;
 	String pass;
+	ArrayList<Post> posts  =  new ArrayList<>();
 	String post;
 	String inputtext;
 	int userID;
 	Boolean matched;
+	PostDBUtil postdb;
+	
 	public User(String email, String name, String pass) {
 
 		this.email = email;
@@ -26,14 +29,14 @@ public class User {
 		this.pass = pass;
 	}
 	
-	public User( String email, String name,int userId) {
-		this.userID = userId;
+	public User(String email,String name,int userID) {
+		this.email=email;
 		this.name=name;
-		this.email = email;
+		this.userID=userID;
 	}
+	
 	public User(int userId, String email,String post) {
 		this.userID = userId;
-		this.post=post;
 		this.email = email;
 	}
 	
@@ -44,14 +47,6 @@ public class User {
 	
 	public User(String inputtext) {
 	this.inputtext=inputtext;	
-	}
-	
-	public String getPost() {
-		return post;
-	}
-	
-	public void setPost(String post) {
-		 this.post=post;
 	}
 	
 	public int getUserId() {
@@ -76,27 +71,39 @@ public class User {
 		this.name = name;
 	}
 	public String getPass() {
-		return pass;			
+		return this.pass;			
 	}
 	public void setPass(String pass) {
 		this.pass = pass;
 	}
 	public boolean getMatch()
 	{
-		return matched;
+		return this.matched;
 	}
 	public void setMatch(boolean match)
 	{
 		this.matched = match;
 	}
 	
-	/*public String getInputText() {
-		return inputtext;
+	public ArrayList<Post> getPosts()
+	{
+		return this.posts;
 	}
 	
-	public  void setInputText(String inputtext) {
-		this.inputtext=inputtext;
-	}*/
+	public String getPost()
+	{
+		return this.post;
+	}
+	public void setPost(String post)
+	{
+		this.post = post;
+	}
+	
+	
+	public void setPosts(Post post)
+	{
+		this.posts.add(post);
+	}
 	
 	public void register(UserDBUtil userdb) {
 		
@@ -119,6 +126,8 @@ public class User {
 			if(this.pass.equals(dtemp.getPass()))
 			{
 				this.name = dtemp.getName();
+				this.email = dtemp.getEmail();
+				
 				this.setMatch(true);								
 			}	
 			else
@@ -143,20 +152,18 @@ public class User {
 	}
 	
 	
-/*	
-public ArrayList<User> DisplayDatabasePosts(PostDBUtil postdb) {
+	public void DisplayAllPosts(PostDBUtil postdb) {
 		
 		try {
-			return(postdb.getPostDetails(this.email));
-			
+			postdb.DoGet(this);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
 		}
 		
 	}
-
+	
+/*
 public void searchfriendindatabase(String inputtext) {
 	
 	PostDBUtil postdb=new PostDBUtil();

@@ -1,5 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+    
+    <%@ page import="com.project.models.*" %>
+    <%@page import="java.util.ArrayList" %>
+    
+    <%@ taglib prefix="tag" uri="http://java.sun.com/jsp/jstl/core" %>
     
 <!DOCTYPE html>
 <html>
@@ -28,7 +32,28 @@
   <form action="PostOperations" method="post">
   <input type="submit"  value="Personal Profile" name="profile">
   </form>
- 
   
+   <%
+         User temp = (User)session.getAttribute("user");
+		  ArrayList<Post> postitem = temp.getPosts();
+		 
+		  
+		 for(Post item : postitem)
+		 {
+		 	out.println("Content:"+item.getContent()+"\n");  
+	 		out.println("Email:"+item.getEmail()+"\n");
+	 		out.println("Date:"+item.getDate()+"\n");
+		  }
+		 
+		 //User temp = (User) session.getAttribute("user");
+ %>
+
+ <!--   
+ <tag:forEach var="post" items="${temp.getPosts()}">
+ <div>
+ <h1>${post.getContent()}}</h1>
+ 	<h1>Helo</h1>
+ </div>
+  </tag:forEach> -->
 </body>
 </html>
