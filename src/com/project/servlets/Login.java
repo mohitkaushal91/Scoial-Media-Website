@@ -69,8 +69,7 @@ public class Login extends HttpServlet {
 		if(temp.getMatch() == true)
 		{
 			HttpSession session=request.getSession();  
-	        session.setAttribute("user", temp);
-	        
+	        session.setAttribute("user", temp);	        
 	        response.sendRedirect("Home");
 		}
 	}

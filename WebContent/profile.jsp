@@ -2,8 +2,7 @@
     pageEncoding="ISO-8859-1"%>
     <%@page import="java.util.ArrayList" %>
     <%@page import="com.project.models.User" %>
-    
-    <%--  <%ArrayList useremployees=(ArrayList)request.getAttribute("useremployees"); %>--%>
+    <%@page import="com.project.models.Post" %>
     
 <!DOCTYPE html>
 <html>
@@ -12,23 +11,32 @@
 <title>Insert title here</title>
 </head>
 <body>
-hello profile
+hello <%
+
+User temp1 = (User)session.getAttribute("user");
+
+out.println(temp1.getName());
+
+%>
+
+ <%
+         User usertemp = (User)session.getAttribute("user");
+		  ArrayList<Post> userpostitem = usertemp.getUserPosts();
+		 
+		  
+		 for(Post items : userpostitem)
+		 {
+			 %><div>  
+			 <% 	out.println("Email:"+items.getEmail()+"\n");       %>       <br>
+		     <%     out.println("Content:"+items.getContent()+"\n");   %>   <br> 		
+	    	 <% 	out.println("Date:"+items.getDate()+"\n");         %>   <br>
+	</div>  <br>	<br> <%   } 
+		 
+		 //User temp = (User) session.getAttribute("user");
+ %>
 
 <br />
- <%
-// String fied=request.getParameter("fied");
- ArrayList<User> list = (ArrayList<User>) request.getAttribute("fied");
- for(User item : list) 
- {
-	 out.println("name:"+item.getName()+"\n");  
-	 out.println("id:"+item.getEmail()+"\n");
-	 //out.println("post:"+item.getPost()+"\n");
-	
-	/*  out.println("email:"+item.getEmail()+"\n"); */
-	
- }
 
- %>
      
      
      <table>

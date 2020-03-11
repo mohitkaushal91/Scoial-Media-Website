@@ -11,11 +11,13 @@ public class User {
 	String name;
 	String pass;
 	ArrayList<Post> posts  =  new ArrayList<>();
+	
+	ArrayList<Post> userPosts  =  new ArrayList<>();
 	String post;
 	String inputtext;
 	int userID;
 	Boolean matched;
-	PostDBUtil postdb;
+	
 	
 	public User(String email, String name, String pass) {
 
@@ -105,6 +107,15 @@ public class User {
 		this.posts.add(post);
 	}
 	
+	public void setUserPosts(Post post)
+	{
+		this.userPosts.add(post);
+	}
+	public ArrayList<Post> getUserPosts()
+	{
+		return this.userPosts;
+	}
+	
 	public void register(UserDBUtil userdb) {
 		
 		try {
@@ -140,10 +151,14 @@ public class User {
 		}
 	}
 	
-	public void post(PostDBUtil postdb)
+	public void post(String post ,PostDBUtil postdb)
 	{
+		System.out.println("user post");
 		try {
-			postdb.DoPost(this);
+			
+			System.out.println(this.email);
+System.out.println(post);
+			postdb.DoPost(new Post(this.email,post));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -156,6 +171,17 @@ public class User {
 		
 		try {
 			postdb.DoGet(this);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void GetUserPost(PostDBUtil postdb) {
+		
+		try {
+			postdb.DoGetOnlyUserPosts(this);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

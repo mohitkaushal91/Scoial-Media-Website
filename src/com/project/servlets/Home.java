@@ -60,14 +60,8 @@ public class Home extends HttpServlet {
 		
 		user.DisplayAllPosts(postdb);
 		
+		session.setAttribute("user", user);	
 		
-		User u1 = (User) session.getAttribute("user");
-		
-		for(Post p: u1.getPosts()) {
-			System.out.println(p.getContent());
-		}
-		
-		session.setAttribute("user", user);
 		
 		response.sendRedirect("Home.jsp");
 			

@@ -40,13 +40,21 @@
 		  
 		 for(Post item : postitem)
 		 {
-		 	out.println("Content:"+item.getContent()+"\n");  
-	 		out.println("Email:"+item.getEmail()+"\n");
-	 		out.println("Date:"+item.getDate()+"\n");
-		  }
+			 %><div>  
+			 <% 	out.println("Email:"+item.getEmail()+"\n");       %>       <br>
+		     <%     out.println("Content:"+item.getContent()+"\n");   %>   <br> 		
+	    	 <% 	out.println("Date:"+item.getDate()+"\n");         %>   <br>
+	</div>  <br>	<br> <%   } 
 		 
 		 //User temp = (User) session.getAttribute("user");
  %>
+ 
+ 
+ <div>   
+ 
+ 
+ </div>
+ 
 
  <!--   
  <tag:forEach var="post" items="${temp.getPosts()}">

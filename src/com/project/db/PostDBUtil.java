@@ -35,8 +35,10 @@ public class PostDBUtil {
 		this.datasource = datasource;
 	}
 
-	public void DoPost(User user) throws SQLException {
+	public void DoPost(Post post) throws SQLException {
 
+		System.out.println("start do post");
+		
 		int max = 99999, min = 1;
 		Random rand = new Random();
 		int randno = rand.nextInt((max - min) + 1) + min;
@@ -50,14 +52,18 @@ public class PostDBUtil {
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			LocalDateTime now = LocalDateTime.now();
 
-			String sql = String.format("INSERT INTO posts values('%s','%s','%s','%s','%s')", randno, user.getEmail(),
-					user.getPost(), null, dtf.format(now));
+			String sql = String.format("INSERT INTO posts values('%s','%s','%s','%s','%s')", randno, post.getEmail(),
+					post.getContent(), null, dtf.format(now));
 
-			System.out.println(user.getEmail());
-			System.out.println(user.getPost());
+			System.out.println(post.getEmail());
+			System.out.println(post.getContent());
+			
+			System.out.println("hello post done");
 			smt = conn.createStatement();
 
-			smt.executeUpdate(sql);
+			int r =  smt.executeUpdate(sql);		
+			System.out.println(r);
+		
 		}
 
 		finally {
@@ -65,39 +71,7 @@ public class PostDBUtil {
 		}
 	}
 	
-//	public void DoGet(User user) throws SQLException {
-//
-//		Connection conn = null;
-//		Statement smt = null;
-//		ResultSet res = null;
-//		try {
-//
-//			conn = this.datasource.getConnection();
-//			
-//			String sql = "Select * from posts";
-//			
-//			PreparedStatement pmt = conn.prepareStatement(sql);
-//			res = pmt.executeQuery();
-//			
-//			while (res.next ()){
-//
-//				  //Add records into data list
-//
-//				  user.setPosts(res.getString(3));
-//
-//				  System.out.println(res.getString(3));
-//				  }
-//		}
-//
-//		finally {
-//			close(conn, smt, res);
-//		}
-//	}
-	
-	
 	public void DoGet(User user) throws SQLException {
-		
-//		ArrayList<User> useremployees = new ArrayList<>();
 	
 		try {
 			conn=this.datasource.getConnection();
@@ -110,11 +84,6 @@ public class PostDBUtil {
 				String content = res.getString(3);
 				Timestamp date = res.getTimestamp(5);
 				
-				/*System.out.println(res.getString(2));
-				System.out.println(res.getString(3));
-				System.out.println(res.getString(5));*/
-				
-				
 				user.setPosts(new Post(email,content,date));
 			}
 				
@@ -123,7 +92,34 @@ public class PostDBUtil {
 			e.printStackTrace();
 		}
 		
-//		return useremployees;
+	}
+	
+	public void DoGetOnlyUserPosts(User user) throws SQLException {
+		
+		try {
+			
+			String useremail = user.getEmail();
+			
+			System.out.println("this is post db running for specific email");
+			System.out.println(user.getEmail());
+			conn=this.datasource.getConnection();
+			String sql="Select * from posts WHERE email=?";
+			PreparedStatement pmt = conn.prepareStatement(sql);
+			pmt.setString(1, useremail);
+			res = pmt.executeQuery();
+			
+			while(res.next()) {
+				String email = res.getString(2);
+				String content = res.getString(3);
+				Timestamp date = res.getTimestamp(5);
+				
+				user.setUserPosts(new Post(email,content,date));
+			}
+				
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	

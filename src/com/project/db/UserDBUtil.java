@@ -13,6 +13,11 @@ import com.project.models.User;
 public class UserDBUtil {
 
 	private DataSource datasource;
+	Connection conn = null;
+
+	Statement smt = null;
+	ResultSet res = null;
+	
 
 	public UserDBUtil(DataSource datasource) {
 		this.datasource = datasource;
@@ -50,10 +55,7 @@ public class UserDBUtil {
 
 	public User getUserDetails(String email) throws SQLException {
 
-		Connection conn = null;
-
-		Statement smt = null;
-		ResultSet res = null;
+	
 		try {
 
 			conn = this.datasource.getConnection();
@@ -72,6 +74,36 @@ public class UserDBUtil {
 		}
 	}
 
+	
+	public void getuserpost(User user) throws SQLException {
+		
+		try {
+		conn=this.datasource.getConnection();
+		String sql="Select * from posts WHERE email=?";
+		System.out.println("got single uswer code");
+		System.out.println(user.getEmail());
+		PreparedStatement pmt = conn.prepareStatement(sql);
+		//pmt.setString(1, email);
+		res = pmt.executeQuery();
+		
+		res.next();
+		{
+		System.out.println(res.getString(1));
+		System.out.println(res.getString(2));
+		System.out.print(res.getString(3));
+		}
+		
+		
+		
+		
+		
+		}
+		finally{
+			close(conn,smt,res);
+		}
+	}
+	
+	
 	private void close(Connection conn, Statement smt, ResultSet res) {
 		try {
 			if (res != null) {
