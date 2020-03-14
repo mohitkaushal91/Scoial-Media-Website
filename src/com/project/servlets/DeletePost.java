@@ -12,24 +12,22 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import com.project.db.PostDBUtil;
-import com.project.db.UserDBUtil;
 import com.project.models.User;
 
 /**
- * Servlet implementation class PostOperations
+ * Servlet implementation class DeletePost
  */
-@WebServlet("/PostOperations")
-public class PostOperations extends HttpServlet {
+@WebServlet("/DeletePost")
+public class DeletePost extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PostOperations() {
+    public DeletePost() {
         super();
         // TODO Auto-generated constructor stub
     }
-
     
     @Resource(name="jdbc/project")
     private DataSource datasource;
@@ -39,27 +37,30 @@ public class PostOperations extends HttpServlet {
 	public void init() throws ServletException {
 		// TODO Auto-generated method stub
 		super.init();
-		postdb  = new PostDBUtil(datasource);
+		postdb = new PostDBUtil(datasource);
 		
 	}
-    
-    
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		HttpSession session=request.getSession();
-		User user = (User)session.getAttribute("user");
-
-		user.GetUserPost(postdb);
+		int postid =  Integer.parseInt(request.getParameter("postid"));
+		HttpSession session=request.getSession(); 
 		
-		System.out.println("user get all posts");
-		session.setAttribute("user", user);	
+		System.out.println(postid);
 		
+		User user = (User) session.getAttribute("user");
 		
-		response.sendRedirect("profile.jsp");
+		user.setPostId(postid);
+		
+		user.deletePost(postdb);
+		
+		System.out.println("post deleted successfully");
+		
+		response.sendRedirect("PostOperations");
 		
 	}
 

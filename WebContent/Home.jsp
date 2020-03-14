@@ -5,6 +5,12 @@
     
     <%@ taglib prefix="tag" uri="http://java.sun.com/jsp/jstl/core" %>
     
+    <% 
+    if(session.getAttribute("user") == null)
+    {
+    	response.sendRedirect("Login.jsp");
+    }
+    %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,6 +37,10 @@
   
   <form action="PostOperations" method="post">
   <input type="submit"  value="Personal Profile" name="profile">
+  </form>
+  
+  <form action="Logout" method="post">
+  <input type="submit"  value="Logout" name="logout">
   </form>
   
    <%

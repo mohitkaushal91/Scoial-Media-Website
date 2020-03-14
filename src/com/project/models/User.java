@@ -16,6 +16,7 @@ public class User {
 	String post;
 	String inputtext;
 	int userID;
+	int postID;
 	Boolean matched;
 	
 	
@@ -57,6 +58,15 @@ public class User {
 	public int setUserId(int userID) {
 		this.userID=userID;
 		return userID;
+	}
+	
+	
+	public int getPostId() {
+		return this.postID;
+	}
+	
+	public void setPostId(int postID) {
+		this.postID=postID;
 	}
 	
 	
@@ -119,6 +129,8 @@ public class User {
 	public void register(UserDBUtil userdb) {
 		
 		try {
+			
+			System.out.println("we are in regsiter funct in user");
 			userdb.uploaddata(this);
 			
 			
@@ -157,7 +169,7 @@ public class User {
 		try {
 			
 			System.out.println(this.email);
-System.out.println(post);
+			System.out.println(this.post);
 			postdb.DoPost(new Post(this.email,post));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -181,6 +193,7 @@ System.out.println(post);
 	public void GetUserPost(PostDBUtil postdb) {
 		
 		try {
+			userPosts.clear();
 			postdb.DoGetOnlyUserPosts(this);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -188,21 +201,17 @@ System.out.println(post);
 		}
 		
 	}
-	
-/*
-public void searchfriendindatabase(String inputtext) {
-	
-	PostDBUtil postdb=new PostDBUtil();
-	
-	try {
-		postdb.getuserinfodatabase(this.getInputText());
+
+	public void deletePost(PostDBUtil postdb) {
+		try {
+			userPosts.clear();
+			postdb.deletePost(this);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();	
 	}
-	
-}*/
 	
 	
 }

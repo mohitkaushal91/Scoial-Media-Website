@@ -6,6 +6,7 @@ public class Post {
 
 	String email,content;
 	Timestamp date;
+	int postID;
 	
 	public Post()
 	{
@@ -21,15 +22,24 @@ public class Post {
 	    
 	}
 	
-	public Post(String email, String content,Timestamp date) {
+	public Post(int postID, String email, String content,Timestamp date) {
 		// TODO Auto-generated constructor stub
-		
+		this.postID = postID;
 		this.email=email;
 		this.content=content;
 		this.date=date;
 	    
 	}
 
+	public int getPostId() {
+		return this.postID;
+	}
+
+	public void setPostId(int postID) {
+		this.postID = postID;
+	}
+	
+	
 	public String getEmail() {
 		return email;
 	}

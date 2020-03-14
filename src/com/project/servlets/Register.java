@@ -48,8 +48,8 @@ public class Register extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-//		response.getWriter().append("Served at: ").append(request.getContextPath());
 
+		System.out.println("do get in resgiet");
 		String name = request.getParameter("uname");
 		String pass = request.getParameter("psw");
 		String email = request.getParameter("ename");
@@ -57,7 +57,7 @@ public class Register extends HttpServlet {
 		User tmpUser = new User(email, name, pass);
 		tmpUser.register(userdb);
 		
-		response.sendRedirect("Login.jsp");
+		//response.sendRedirect("Login.jsp");
 		
 
 		System.out.println(userdb);

@@ -4,6 +4,13 @@
     <%@page import="com.project.models.User" %>
     <%@page import="com.project.models.Post" %>
     
+    <% 
+    if(session.getAttribute("user") == null)
+    {
+    	response.sendRedirect("Login.jsp");
+    }
+    %>
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,27 +37,42 @@ out.println(temp1.getName());
 			 <% 	out.println("Email:"+items.getEmail()+"\n");       %>       <br>
 		     <%     out.println("Content:"+items.getContent()+"\n");   %>   <br> 		
 	    	 <% 	out.println("Date:"+items.getDate()+"\n");         %>   <br>
+	    	 <input type="button" value="Edit Post" onclick="showEditBox(<%=items.getPostId()%>)"><br>
+	    	 <form action="DeletePost" method="post"><input type="hidden" name="postid" value="<%= items.getPostId() %>"><input type="submit" value="Delete Post"></form><br>
+	    	 
+	    	 <form action="EditPost" method="post">
+		    	 <div class="editPost" id="edit<%=items.getPostId()%>">
+		    	 
+		    	 	<textarea rows="4" cols="40" name="newpostcontent"><% out.println("Content:"+items.getContent()+"\n"); %></textarea>
+		    	 	
+		    	 	<input type="hidden" name="postid" value="<%= items.getPostId() %>">
+		    	 	
+		    	 	<input type="submit" value="Save Post" onclick="hideEditBox(<%=items.getPostId()%>)">
+		    	 
+		    	 </div>
+	    	 </form>
+	    	 
+	    	 
+	    	 
+	    	    <br>
 	</div>  <br>	<br> <%   } 
 		 
-		 //User temp = (User) session.getAttribute("user");
  %>
 
 <br />
-
-     
-     
-     <table>
-     <td>
-      <tr>
-    
-      </tr>  
-     
-     </td>
-     
-     </table>
      
       
+    <script>
     
+    function showEditBox(id)
+    {
+        document.getElementById('edit'+ id ).style.display = "block";
+    }
+    function hideEditBox(a){
+        document.querySelector('#edit'+ id ).style.display = "none";
+
+    }
+    </script>
       
   
 

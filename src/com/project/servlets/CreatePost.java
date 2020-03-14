@@ -53,13 +53,6 @@ public class CreatePost extends HttpServlet {
 //		response.getWriter().append("Served at: ").append(request.getContextPath());
 		String post=request.getParameter("createpost");
 		HttpSession session=request.getSession(); 
-//		int userid = (Integer) session.getAttribute("userID");
-//		String email = (String) session.getAttribute("email");
-//		
-//		System.out.println("ttttt"+userid);
-//		System.out.println("ttttt"+email);
-		
-//		User userpost=new User(userid, email,postdetails);
 		System.out.println(post);
 		
 		User userpost = (User) session.getAttribute("user");

@@ -80,11 +80,12 @@ public class PostDBUtil {
 			res=smt.executeQuery(sql);
 			
 			while(res.next()) {
+				int postid = res.getInt(1);
 				String email = res.getString(2);
 				String content = res.getString(3);
 				Timestamp date = res.getTimestamp(5);
 				
-				user.setPosts(new Post(email,content,date));
+				user.setPosts(new Post(postid, email,content,date));
 			}
 				
 		} catch (SQLException e) {
@@ -108,13 +109,48 @@ public class PostDBUtil {
 			pmt.setString(1, useremail);
 			res = pmt.executeQuery();
 			
+			System.out.println(res);
+			
+			System.out.println("just before while loop");
+			
 			while(res.next()) {
+				
+				System.out.println("while loop running to store data");
+				int postid = res.getInt(1);
 				String email = res.getString(2);
 				String content = res.getString(3);
 				Timestamp date = res.getTimestamp(5);
 				
-				user.setUserPosts(new Post(email,content,date));
+				System.out.println(email);
+				
+				user.setUserPosts(new Post(postid, email,content,date));
 			}
+				
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+public void deletePost(User user) throws SQLException {
+		
+		try {
+			
+			int postid = user.getPostId();
+			
+			System.out.println(postid);
+			
+			System.out.println("this is post db running to delete post");
+			
+			conn=this.datasource.getConnection();
+			String sql="Delete from posts WHERE postID=?";
+			PreparedStatement pmt = conn.prepareStatement(sql);
+			pmt.setInt(1, postid);
+			pmt.executeUpdate();
+			
+			System.out.println("post deleted");
+			
 				
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
