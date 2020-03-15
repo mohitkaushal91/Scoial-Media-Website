@@ -15,16 +15,16 @@ import com.project.db.PostDBUtil;
 import com.project.models.User;
 
 /**
- * Servlet implementation class EditPost
+ * Servlet implementation class LikePost
  */
-@WebServlet("/EditPost")
-public class EditPost extends HttpServlet {
+@WebServlet("/LikePost")
+public class LikePost extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public EditPost() {
+    public LikePost() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -47,25 +47,33 @@ public class EditPost extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-				String editpost=request.getParameter("newpostcontent");
-				int postid=Integer.parseInt(request.getParameter("postid"));
-				HttpSession session=request.getSession(); 
-				
-				System.out.println(editpost);
-				System.out.println(postid);
-				
-				User userpost = (User) session.getAttribute("user");
-				System.out.println("Email");
-				System.out.println(userpost.getEmail());
-				
-				userpost.setPost(editpost);
-				userpost.setPostId(postid);
-				userpost.Editpost(postdb);
-				
-				System.out.println("done everything");
-
-				response.sendRedirect("PostOperations");
+		String action = request.getParameter("likeaction");
+		
+		System.out.println(action);
+		
+		int postid=Integer.parseInt(request.getParameter("postid"));
+		System.out.println(postid);
+		
+		HttpSession session=request.getSession(); 
+		User userpost = (User) session.getAttribute("user");
+		
+		userpost.setPostId(postid);
+		
+		if(action.equals("like"))
+		{
+			session.setAttribute("likedpost"+postid,"like");
+			System.out.println("like if");
+			userpost.insertLike(postdb);
+		}
+		else
+		{
+			session.setAttribute("likedpost"+postid,"unlike");
+			userpost.deleteLike(postdb);
+		}
+		
+		//response.sendRedirect("Home.jsp");
+		response.sendRedirect("Home");
+		
 		
 	}
 

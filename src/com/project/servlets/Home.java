@@ -1,6 +1,7 @@
 package com.project.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -62,6 +63,12 @@ public class Home extends HttpServlet {
 		
 		session.setAttribute("user", user);	
 		
+		ArrayList<Integer> likedpostids = user.getLikedPostInSession();
+		
+		for(Integer id:likedpostids)
+		{
+			session.setAttribute("likedpost"+id, "like");
+		}
 		
 		response.sendRedirect("Home.jsp");
 			

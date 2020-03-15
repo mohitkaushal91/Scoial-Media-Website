@@ -17,6 +17,12 @@
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 </head>
+<style>
+/*.unlike
+{
+display:none;
+}*/
+</style>
 <body>
 
  <form action="Addfriend" method="post">
@@ -28,10 +34,10 @@
   <div>
   <label for="post" > WHAT'S ON YOUR MIND </label>   <br>
    
-  <input type="text" for="PostOperations" name="createpost">
+  <input type="text" name="createpost">
   </div>
   
-  <input type="submit"  value="Post anything" for="homepost"><br>
+  <input type="submit" value="Post anything" for="homepost"><br>
  
   </form>
   
@@ -54,24 +60,47 @@
 			 <% 	out.println("Email:"+item.getEmail()+"\n");       %>       <br>
 		     <%     out.println("Content:"+item.getContent()+"\n");   %>   <br> 		
 	    	 <% 	out.println("Date:"+item.getDate()+"\n");         %>   <br>
-	</div>  <br>	<br> <%   } 
-		 
-		 //User temp = (User) session.getAttribute("user");
- %>
- 
+	    	 <% 	out.println("Date:"+item.getDate()+"\n");         %>   <br>
+	    	 <% 	out.println("Likes:"+item.getLikes()+"\n");         %>   <br>
+	    	 <form action="LikePost" method="post">
+	    	 	<input type="hidden" value="<%= item.getPostId() %>" name="postid">
+	    	 	<% 
+	    	 	if(session.getAttribute("likedpost"+item.getPostId()) == null)
+	    	 	{
+	    	 		%>
+	    	 		<input type="submit" value="like" name="likeaction" id="like<%= item.getPostId() %>" onclick="hidelike(<%= item.getPostId() %>)">
+	    	 	<% }
+	    	 	else if(session.getAttribute("likedpost"+item.getPostId()) != null){
+	    	 	if(session.getAttribute("likedpost"+item.getPostId()).equals("unlike"))
+	    	 			{
+	    	 			%>
+	    	 	<input type="submit" value="like" name="likeaction" id="like<%= item.getPostId() %>" onclick="hidelike(<%= item.getPostId() %>)">
+	    	 	<%}
+	    	 	else
+	    	 	{%>
+	    	 	<input type="submit" class="unlike" name="likeaction" value="unlike" id="unlike<%= item.getPostId() %>" onclick="hideunlike(<%= item.getPostId() %>)">
+	    	 	<%}} %>
+	    	 </form>
+		</div>  <br>	<br> <%   } 
+ 	%>
  
  <div>   
- 
- 
  </div>
  
-
- <!--   
- <tag:forEach var="post" items="${temp.getPosts()}">
- <div>
- <h1>${post.getContent()}}</h1>
- 	<h1>Helo</h1>
- </div>
-  </tag:forEach> -->
+ <script>
+ /*
+ function hidelike(id)
+ {
+	 document.getElementById('like'+ id ).style.display = "none";
+	 document.getElementById('unlike'+ id ).style.display = "block";
+ }
+ 
+ function hideunlike(id)
+ {
+	 document.getElementById('unlike'+ id ).style.display = "none";
+	 document.getElementById('like'+ id ).style.display = "block";
+ }
+ */
+ </script>
 </body>
 </html>

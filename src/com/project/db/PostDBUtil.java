@@ -25,6 +25,8 @@ public class PostDBUtil {
 	Connection conn = null;
 	Statement smt = null;
 	ResultSet res = null;
+	ResultSet result = null;
+	ResultSet resultofuser = null;
 	User userdb;
 
 	public PostDBUtil() {
@@ -79,13 +81,34 @@ public class PostDBUtil {
 			smt = conn.createStatement();
 			res=smt.executeQuery(sql);
 			
+			String useremail = user.getEmail();
+			
 			while(res.next()) {
+				int likes = 0;
 				int postid = res.getInt(1);
 				String email = res.getString(2);
 				String content = res.getString(3);
 				Timestamp date = res.getTimestamp(5);
 				
-				user.setPosts(new Post(postid, email,content,date));
+				String sql1="Select COUNT(email) from likes WHERE postID=?";
+				PreparedStatement pmt1 = conn.prepareStatement(sql1);
+				pmt1.setInt(1, postid);
+				result = pmt1.executeQuery();
+				
+				result.next();
+				likes = result.getInt(1);
+				
+				String sql2="Select postID from likes WHERE email=?";
+				PreparedStatement pmt2 = conn.prepareStatement(sql2);
+				pmt2.setString(1, useremail);
+				resultofuser = pmt2.executeQuery();
+				
+				while(resultofuser.next())
+				{
+					user.setLikedPostInSession(resultofuser.getInt(1));
+				}
+				
+				user.setPosts(new Post(postid, email,content,date, likes));
 			}
 				
 		} catch (SQLException e) {
@@ -101,27 +124,18 @@ public class PostDBUtil {
 			
 			String useremail = user.getEmail();
 			
-			System.out.println("this is post db running for specific email");
-			System.out.println(user.getEmail());
 			conn=this.datasource.getConnection();
 			String sql="Select * from posts WHERE email=?";
 			PreparedStatement pmt = conn.prepareStatement(sql);
 			pmt.setString(1, useremail);
 			res = pmt.executeQuery();
 			
-			System.out.println(res);
-			
-			System.out.println("just before while loop");
-			
 			while(res.next()) {
 				
-				System.out.println("while loop running to store data");
 				int postid = res.getInt(1);
 				String email = res.getString(2);
 				String content = res.getString(3);
 				Timestamp date = res.getTimestamp(5);
-				
-				System.out.println(email);
 				
 				user.setUserPosts(new Post(postid, email,content,date));
 			}
@@ -133,101 +147,105 @@ public class PostDBUtil {
 		
 	}
 	
-public void deletePost(User user) throws SQLException {
-		
-		try {
+	public void deletePost(User user) throws SQLException {
 			
-			int postid = user.getPostId();
-			
-			System.out.println(postid);
-			
-			System.out.println("this is post db running to delete post");
-			
-			conn=this.datasource.getConnection();
-			String sql="Delete from posts WHERE postID=?";
-			PreparedStatement pmt = conn.prepareStatement(sql);
-			pmt.setInt(1, postid);
-			pmt.executeUpdate();
-			
-			System.out.println("post deleted");
-			
+			try {
 				
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				int postid = user.getPostId();
+				
+				conn=this.datasource.getConnection();
+				String sql="Delete from posts WHERE postID=?";
+				PreparedStatement pmt = conn.prepareStatement(sql);
+				pmt.setInt(1, postid);
+				pmt.executeUpdate();
+					
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
+
+
+	public void UpdateEditPost(User user) throws SQLException {
 		
-	}
+		int postid = user.getPostId();
+		String neweditpost = user.getPost();
 	
-
-	/*
-	public ArrayList<User> getPostDetails(String email) throws SQLException {
-
-		ArrayList<User> useremployees = new ArrayList<>();
-
 		Connection conn = null;
 		Statement smt = null;
 		ResultSet res = null;
 		try {
-
+	
 			conn = this.datasource.getConnection();
-			String sql = "Select * from posts WHERE email=?";
-			PreparedStatement pmt = conn.prepareStatement(sql);
-			pmt.setString(1, email);
-			res = pmt.executeQuery();
-
-			User user = new User();
-
-			res.next();
-			{
-
-				user.setUserId(res.getInt(1));  // int id
-				user.setPost(res.getString(2));   // email
-				user.setName(res.getString(3));   // name
-				
-//				user.setUserId(res.getInt(3));
-
-				useremployees.add(user);
-				System.out.println("from db " + user.getUserId() + " 2 - " + user.getPost() + " 3 - " + user.getName());
-			}
-*/
-			/*
-			 * System.out.println(res.getString(1)); //email
-			 * 
-			 * System.out.println(res.getString(2)); // post
-			 * 
-			 * System.out.println(res.getInt(4));
-			 * 
-			 * 
-			 * User dbtemp = new User(res.getString(3), res.getString(2), res.getInt(4));
-			 * System.out.println(res.getString(3)); System.out.println(res.getString(2));
-			 * System.out.println(res.getString(4));
-			 */
-/*
-			return useremployees;
-
+			
+			String sql = "update posts set content=? where postID=?";
+		      PreparedStatement preparedStmt = conn.prepareStatement(sql);
+		      preparedStmt.setString(1, neweditpost);
+		      preparedStmt.setInt(2, postid);
+		      
+		      preparedStmt.executeUpdate();
 		}
-
+	
 		finally {
 			close(conn, smt, res);
 		}
 	}
+	
+public void insertLikes(User user) throws SQLException {
+		
+		int postid = user.getPostId();
+		String email = user.getEmail();
+		
+		System.out.println(postid);
+		System.out.println(email);
+		
+	
+		Connection conn = null;
+		Statement smt = null;
+		ResultSet res = null;
+		try {
+	
+			conn = this.datasource.getConnection();
+			System.out.println("just before insert");
+			
+			String sql = String.format("INSERT INTO likes values('%d','%s')", postid, email);
+			smt = conn.createStatement();
+			int r =  smt.executeUpdate(sql);
+			
+			System.out.println("inserytion done");
+		}
+	
+		finally {
+			close(conn, smt, res);
+		}
+	}
+	
 
-	public void getuserinfodatabase(String name) throws SQLException {
-		Connection conn;
-		Statement smt;
-		ResultSet res;
+public void deleteLikes(User user) throws SQLException {
+	
+	int postid = user.getPostId();
+	String email = user.getEmail();
+
+	Connection conn = null;
+	Statement smt = null;
+	ResultSet res = null;
+	try {
 
 		conn = this.datasource.getConnection();
-		String sql = "Select name from users where name=?";
-		PreparedStatement pre = conn.prepareStatement(sql);
-		pre.setString(1, name);
-		res = pre.executeQuery();
+		
+		String sql="Delete from likes WHERE postID=? AND email=?";
+		PreparedStatement pmt = conn.prepareStatement(sql);
+		pmt.setInt(1, postid);
+		pmt.setString(2, email);
+		pmt.executeUpdate();
+	}
 
-		res.next();
-		System.out.println(res.getString(1));
+	finally {
+		close(conn, smt, res);
+	}
+}
 
-	}*/
 
 	private void close(Connection conn, Statement smt, ResultSet res) {
 		try {

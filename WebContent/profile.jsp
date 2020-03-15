@@ -16,8 +16,22 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
+
+<style>
+.editPost
+{
+
+	display: none;
+
+}
+</style>
 </head>
 <body>
+
+<form action="Home" method="post">
+<input type="submit" value="Back to Home">
+</form>
+<br>
 hello <%
 
 User temp1 = (User)session.getAttribute("user");
@@ -43,7 +57,7 @@ out.println(temp1.getName());
 	    	 <form action="EditPost" method="post">
 		    	 <div class="editPost" id="edit<%=items.getPostId()%>">
 		    	 
-		    	 	<textarea rows="4" cols="40" name="newpostcontent"><% out.println("Content:"+items.getContent()+"\n"); %></textarea>
+		    	 	<textarea rows="4" cols="40" name="newpostcontent"><% out.println(items.getContent()+"\n"); %></textarea>
 		    	 	
 		    	 	<input type="hidden" name="postid" value="<%= items.getPostId() %>">
 		    	 	
@@ -68,7 +82,7 @@ out.println(temp1.getName());
     {
         document.getElementById('edit'+ id ).style.display = "block";
     }
-    function hideEditBox(a){
+    function hideEditBox(id){
         document.querySelector('#edit'+ id ).style.display = "none";
 
     }

@@ -2,6 +2,9 @@ package com.project.models;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import javax.servlet.http.HttpSession;
+
 import com.project.db.PostDBUtil;
 import com.project.db.UserDBUtil;
 
@@ -11,6 +14,8 @@ public class User {
 	String name;
 	String pass;
 	ArrayList<Post> posts  =  new ArrayList<>();
+	
+	ArrayList<Integer> likedpostsID = new ArrayList<>();
 	
 	ArrayList<Post> userPosts  =  new ArrayList<>();
 	String post;
@@ -182,6 +187,7 @@ public class User {
 	public void DisplayAllPosts(PostDBUtil postdb) {
 		
 		try {
+			likedpostsID.clear();
 			postdb.DoGet(this);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -213,5 +219,50 @@ public class User {
 		
 	}
 	
+	public void Editpost(PostDBUtil postdb)
+	{
+		try {
+			userPosts.clear();
+			postdb.UpdateEditPost(this);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+	}
+	
+	public void insertLike(PostDBUtil postdb)
+	{
+		try {
+			posts.clear();
+			postdb.insertLikes(this);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+	}
+	
+	public void deleteLike(PostDBUtil postdb)
+	{
+		try {
+			posts.clear();
+			postdb.deleteLikes(this);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+	}
+	
+	public void setLikedPostInSession(int postid)
+	{
+		likedpostsID.add(postid);
+	}
+	
+	public ArrayList<Integer> getLikedPostInSession()
+	{
+		return this.likedpostsID;
+	}
 	
 }
